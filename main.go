@@ -19,7 +19,8 @@ var lineCount int
 var wordCount int
 
 func main() {
-	f, err := os.Open("file.txt")
+	filename := os.Args[1]
+	f, err := os.Open(filename)
 	assert(err)
 	defer f.Close()
 
