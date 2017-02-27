@@ -25,27 +25,37 @@ func main() {
 		lineCount++
 		charCount++
 		slice := scanner.Bytes()
-		for index, value := range slice {
+		for index, char := range slice {
 			charCount++
-			if value == 32 {
-				if index > 0 {
-					previousChar := slice[index-1]
-					if previousChar != 32 {
-						wordCount++
-					}
-				} else {
+			// Treat tabs as spaces too.
+			if isSpace(char) {
+				if index == 0 {
 					continue
+				}
+
+				previousChar := slice[index-1]
+				if !isSpace(previousChar) {
+					wordCount++
 				}
 			}
 		}
 		// last item is space, then don't add value
 		length := len(slice)
-		if length != 0 && slice[length-1] != 32 {
+		if length == 0 {
+			continue
+		}
+
+		lastChar := slice[length-1]
+		if !isSpace(lastChar) {
 			wordCount++
 		}
 	}
 
+	fmt.Println("word count: ", wordCount)
 	fmt.Println("line count: ", lineCount)
 	fmt.Println("char count: ", charCount)
-	fmt.Println("word count: ", wordCount)
+}
+
+func isSpace(char byte) bool {
+	return char == 32 || char == 9
 }
