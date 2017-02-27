@@ -25,10 +25,17 @@ func main() {
 		lineCount++
 		charCount++
 		slice := scanner.Bytes()
-		for _, value := range slice {
+		for index, value := range slice {
 			charCount++
 			if value == 32 {
-				wordCount++
+				if index > 0 {
+					previousChar := slice[index-1]
+					if previousChar != 32 {
+						wordCount++
+					}
+				} else {
+					continue
+				}
 			}
 		}
 		// last item is space, then don't add value
