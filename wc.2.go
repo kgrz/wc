@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 func main() {
 	filename := os.Args[1]
+	checkIfAscii(filename)
 	f, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -54,8 +56,21 @@ func main() {
 	fmt.Println("word count: ", wordCount)
 	fmt.Println("line count: ", lineCount)
 	fmt.Println("char count: ", charCount)
+	os.Exit(0)
 }
 
 func isSpace(char byte) bool {
 	return char == 32 || char == 9
+}
+
+func checkIfAscii(filename string) {
+	out, err := exec.Command("file", "-0", "-b", "--mime-encoding", filename).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	encoding := string(out)
+
+	if encoding != "us-ascii\n" {
+		log.Fatal("File encoding not supported yet. Need US-ASCII, got: ", encoding)
+	}
 }
