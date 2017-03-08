@@ -14,6 +14,11 @@ type fixtures struct {
 	chars int
 }
 
+// Each of the test case results below are based on the output of `wc` program
+// on a plain text file with the string contents. I'm trading off actual
+// correctness in favour of verifiable comparision between wc and my wc program.
+// For example, one would expect a hyphenated word to count as one, but the
+// *nix wc program counts them as two words.
 var tests = []fixtures{
 	{"this is a test string", 5, 1, 22},
 	{"this   is          a     test string", 5, 1, 37},
@@ -21,8 +26,11 @@ var tests = []fixtures{
 	{"this is a test string\nthis is another string", 9, 2, 45},
 	{"this is a test string\n\n\n\n\n\nthis is another string", 9, 7, 50},
 	{"this is a test string\n this is another string", 9, 2, 46},
+	{"this is a test str-\ning this is another string", 10, 2, 47},
 	{"this is a test string \n this is another string", 9, 2, 47},
 	{"this * * ***** is a test string", 8, 1, 32},
+	{"😀", 1, 1, 2},
+	{"👂🏼", 1, 1, 3},
 }
 
 func TestReadAndCount(t *testing.T) {

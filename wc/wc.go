@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"unicode/utf8"
 )
 
 type Count struct {
@@ -30,8 +31,9 @@ func ReadAndCount(f io.Reader) Count {
 		count.Lines++
 		count.Chars++
 		slice := scanner.Bytes()
+		count.Chars += utf8.RuneCount(slice)
+
 		for index, char := range slice {
-			count.Chars++
 			if isSpace(char) {
 				if index == 0 {
 					continue
