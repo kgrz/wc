@@ -31,6 +31,8 @@ var tests = []fixtures{
 	{"this * * ***** is a test string", 8, 1, 32},
 	{"😀", 1, 1, 2},
 	{"👂🏼", 1, 1, 3},
+	{"😀😀\n👂🏼", 2, 2, 6},
+	{"😀 😀\n👂🏼", 3, 2, 7},
 }
 
 func TestReadAndCount(t *testing.T) {
