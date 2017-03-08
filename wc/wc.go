@@ -32,7 +32,6 @@ func ReadAndCount(f io.Reader) Count {
 		slice := scanner.Bytes()
 		for index, char := range slice {
 			count.Chars++
-			// Treat tabs as spaces too.
 			if isSpace(char) {
 				if index == 0 {
 					continue
@@ -46,13 +45,11 @@ func ReadAndCount(f io.Reader) Count {
 		}
 		// last item is space, then don't add value
 		length := len(slice)
-		if length == 0 {
-			continue
-		}
-
-		lastChar := slice[length-1]
-		if !isSpace(lastChar) {
-			count.Words++
+		if length > 0 {
+			lastChar := slice[length-1]
+			if !isSpace(lastChar) {
+				count.Words++
+			}
 		}
 	}
 
