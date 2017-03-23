@@ -29,7 +29,7 @@ var tests = []fixtures{
 	{"this is a test str-\ning this is another string", 10, 2, 47},
 	{"this is a test string \n this is another string", 9, 2, 47},
 	{"this * * ***** is a test string", 8, 1, 32},
-	{"é", 1, 1, 1},
+	{"é", 1, 1, 2},
 	{"😀", 1, 1, 2},
 	{"👂🏼", 1, 1, 3},
 	{"😀😀\n👂🏼", 2, 2, 6},
