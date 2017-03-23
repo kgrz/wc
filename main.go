@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 
 	"github.com/kgrz/wc/wc"
 )

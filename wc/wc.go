@@ -32,25 +32,23 @@ func ReadAndCount(f io.Reader) Count {
 		count.Chars++
 		slice := scanner.Bytes()
 		count.Chars += utf8.RuneCount(slice)
+		lineLength := len(slice)
 
 		for index, char := range slice {
-			if isSpace(char) {
-				if index == 0 {
-					continue
-				}
+			if index == 0 {
+				continue
+			}
 
+			if isSpace(char) {
 				previousChar := slice[index-1]
 				if !isSpace(previousChar) {
 					count.Words++
 				}
-			}
-		}
-		// last item is space, then don't add value
-		length := len(slice)
-		if length > 0 {
-			lastChar := slice[length-1]
-			if !isSpace(lastChar) {
-				count.Words++
+			} else {
+				if index == lineLength-1 {
+					count.Words++
+				}
+
 			}
 		}
 	}
