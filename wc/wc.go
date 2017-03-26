@@ -3,7 +3,6 @@ package wc
 import (
 	"bufio"
 	"fmt"
-	"hash/fnv"
 	"io"
 	"unicode/utf8"
 )
@@ -25,8 +24,6 @@ func isSpace(char byte) bool {
 func ReadAndCount(f io.Reader) Count {
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
-	freqs := make(map[string]int, 0)
-	h := fnv.New64()
 
 	var count Count
 
@@ -36,7 +33,6 @@ func ReadAndCount(f io.Reader) Count {
 		slice := scanner.Bytes()
 		count.Chars += utf8.RuneCount(slice)
 		lineLength := len(slice)
-		var word []byte
 
 		for index, char := range slice {
 			if index == 0 {
@@ -44,26 +40,17 @@ func ReadAndCount(f io.Reader) Count {
 			}
 
 			if isSpace(char) {
-				word = append(word, char)
 				previousChar := slice[index-1]
 				if !isSpace(previousChar) {
-					h.Write(word)
-					hash := fmt.Sprintf("%d", h.Sum(nil))
-					freqs[hash]++
 					count.Words++
 				}
 			} else {
 				if index == lineLength-1 {
-					h.Write(word)
-					hash := fmt.Sprintf("%d", h.Sum(nil))
-					freqs[hash]++
 					count.Words++
 				}
 
 			}
 		}
-
-		h.Reset()
 	}
 
 	return count
