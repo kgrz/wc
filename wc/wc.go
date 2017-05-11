@@ -7,13 +7,15 @@ import (
 	"unicode/utf8"
 )
 
-type Count struct {
+// Count contains the snapshot of the Word, Line, Char counts after the file is
+// processed.
+type Counts struct {
 	Words int
 	Lines int
 	Chars int
 }
 
-func (c Count) String() string {
+func (c Counts) String() string {
 	return fmt.Sprintf("word count: %d\nline count: %d\nchar count: %d", c.Words, c.Lines, c.Chars)
 }
 
@@ -21,11 +23,12 @@ func isSpace(char byte) bool {
 	return char == 32 || char == 9
 }
 
-func ReadAndCount(f io.Reader) Count {
+// Implements the main character, word, line counting routines.
+func Count(f io.Reader) Counts {
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
 
-	var count Count
+	var count Counts
 
 	for scanner.Scan() {
 		count.Lines++
