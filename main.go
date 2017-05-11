@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/kgrz/wc/wc"
 )
 
 func main() {
@@ -24,6 +22,6 @@ func main() {
 	}
 	defer f.Close()
 
-	counts := wc.Count(f)
+	counts := count(f)
 	fmt.Println(counts)
 }

@@ -1,4 +1,4 @@
-package wc
+package main
 
 import (
 	"bufio"
@@ -24,7 +24,7 @@ func isSpace(char byte) bool {
 }
 
 // Implements the main character, word, line counting routines.
-func Count(f io.Reader) Counts {
+func count(f io.Reader) Counts {
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
 

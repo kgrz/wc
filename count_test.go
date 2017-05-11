@@ -1,10 +1,8 @@
-package wc
+package main
 
 import (
 	"strings"
 	"testing"
-
-	"github.com/kgrz/wc/wc"
 )
 
 type fixtures struct {
@@ -38,7 +36,7 @@ var tests = []fixtures{
 
 func TestReadAndCount(t *testing.T) {
 	for i, fixture := range tests {
-		count := wc.ReadAndCount(strings.NewReader(fixture.input))
+		count := count(strings.NewReader(fixture.input))
 
 		if count.Words != fixture.words {
 			t.Error(
@@ -137,6 +135,6 @@ func BenchmarkReadAndCount(b *testing.B) {
 	reader := strings.NewReader(input)
 
 	for i := 0; i < b.N; i++ {
-		wc.ReadAndCount(reader)
+		count(reader)
 	}
 }
