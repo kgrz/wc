@@ -37,19 +37,21 @@ func count(f io.Reader) Counts {
 		count.Chars += utf8.RuneCount(slice)
 		lineLength := len(slice)
 
-		for i := 1; i < len(slice); i++ {
-			char := slice[i]
+		for index, char := range slice {
+			if index == 0 {
+				continue
+			}
+
 			if isSpace(char) {
-				previousChar := slice[i-1]
+				previousChar := slice[index-1]
 				if !isSpace(previousChar) {
 					count.Words++
 				}
 			} else {
-				// Current character is not a space, and is the last character of the file.
-				// Increment the word count.
-				if i == lineLength-1 {
+				if index == lineLength-1 {
 					count.Words++
 				}
+
 			}
 		}
 	}
