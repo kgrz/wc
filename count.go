@@ -7,7 +7,7 @@ import (
 	"unicode/utf8"
 )
 
-// Count contains the snapshot of the Word, Line, Char counts after the file is
+// Counts contains the snapshot of the Word, Line, Char counts after the file is
 // processed.
 type Counts struct {
 	Words int
@@ -16,7 +16,7 @@ type Counts struct {
 }
 
 func (c Counts) String() string {
-	return fmt.Sprintf("word count: %d\nline count: %d\nchar count: %d", c.Words, c.Lines, c.Chars)
+	return fmt.Sprintf("line count: %d\nword count: %d\nchar count: %d", c.Lines, c.Words, c.Chars)
 }
 
 func isSpace(char byte) bool {
@@ -34,28 +34,40 @@ func count(f io.Reader) Counts {
 		count.Lines++
 		count.Chars++
 		slice := scanner.Bytes()
-		count.Chars += utf8.RuneCount(slice)
 		lineLength := len(slice)
+
+		// Special case for empty line. Skip to the next iteration
+		if lineLength == 0 {
+			continue
+		}
+
+		count.Chars += utf8.RuneCount(slice)
 		var isPrevCharSpace bool
 
-		for index := 0; index < lineLength; index++ {
+		// Special case for the first character. If it's a space, then set the
+		// previous char pointer to true.
+		if isSpace(slice[0]) {
+			isPrevCharSpace = true
+		}
+
+		// For each line, start from the second byte from the slice
+		for index := 1; index < lineLength; index++ {
 			char := slice[index]
 			if isSpace(char) {
-				if index == 0 {
-					isPrevCharSpace = true
-					continue
-				}
-
 				if !isPrevCharSpace {
 					count.Words++
 				}
 				isPrevCharSpace = true
 			} else {
-				if index == lineLength-1 {
-					count.Words++
-				}
 				isPrevCharSpace = false
 			}
+		}
+
+		// all the bytes until the last one on a line have been counted. If the
+		// previous character (last of the line) is not a space, increment the word
+		// count, but only if the line has some characters.
+		if !isPrevCharSpace {
+			count.Words++
 		}
 	}
 
