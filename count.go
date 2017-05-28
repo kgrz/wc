@@ -36,22 +36,25 @@ func count(f io.Reader) Counts {
 		slice := scanner.Bytes()
 		count.Chars += utf8.RuneCount(slice)
 		lineLength := len(slice)
+		var isPrevCharSpace bool
 
-		for index, char := range slice {
-			if index == 0 {
-				continue
-			}
-
+		for index := 0; index < lineLength; index++ {
+			char := slice[index]
 			if isSpace(char) {
-				previousChar := slice[index-1]
-				if !isSpace(previousChar) {
+				if index == 0 {
+					isPrevCharSpace = true
+					continue
+				}
+
+				if !isPrevCharSpace {
 					count.Words++
 				}
+				isPrevCharSpace = true
 			} else {
 				if index == lineLength-1 {
 					count.Words++
 				}
-
+				isPrevCharSpace = false
 			}
 		}
 	}
