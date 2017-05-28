@@ -27,6 +27,11 @@ var tests = []fixtures{
 	{"this is a test str-\ning this is another string", 10, 2, 47},
 	{"this is a test string \n this is another string", 9, 2, 47},
 	{"this * * ***** is a test string", 8, 1, 32},
+	{". . . . . . . . . .", 10, 1, 20},
+	{`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+	tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+	vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+	no sea takimata sanctus est Lorem ipsum dolor sit amet.`, 50, 4, 299},
 	{"é", 1, 1, 2},
 	{"😀", 1, 1, 2},
 	{"👂🏼", 1, 1, 3},
@@ -34,7 +39,7 @@ var tests = []fixtures{
 	{"😀 😀\n👂🏼", 3, 2, 7},
 }
 
-func TestReadAndCount(t *testing.T) {
+func TestCount(t *testing.T) {
 	for i, fixture := range tests {
 		count := count(strings.NewReader(fixture.input))
 
@@ -70,7 +75,7 @@ func TestReadAndCount(t *testing.T) {
 	}
 }
 
-func BenchmarkReadAndCount(b *testing.B) {
+func BenchmarkCount(b *testing.B) {
 	input := ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
 	diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
 	erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
